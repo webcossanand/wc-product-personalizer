@@ -314,9 +314,9 @@
     //   return;
     // }
 
-    // if(!popup){
-    //   return;
-    // }
+    if (!popup) {
+      return;
+    }
 
     if (holder.querySelector('#wcpp-front-canvas')) {
       return; // canvas already exists
@@ -396,8 +396,12 @@
       nonce: wcPersonalizer.nonce,
       product_id: pid
     }).done(function (resp) {
+      // alert(resp)
+      console.log("RESP: ", resp);
       if (!resp || !resp.success) return;
       var elements = resp.data.elements || [];
+      // alert(elements)
+      console.log("elements: ", elements);
       window.wcppElements = elements;
       if (!elements.length) return;
 
@@ -671,23 +675,76 @@
     $('.wc-add-cart').on('click', function (e) {
       e.preventDefault();
 
+      var cv = document.querySelector('#wc-customize-modal canvas');
+
+      console.log('CV:', cv);
+
+      if (cv) {
+        var png = cv.toDataURL('image/png');
+        $('input[name="wc_personalize_render"]').val(png);
+      }
+
+      $('input[name="wc_personalize_payload"]').val(JSON.stringify(buildPayload()));
+
+
+      // Trigger real WooCommerce add to cart
+      // setTimeout(function () {
+      $('button.single_add_to_cart_button').trigger('click');
+      // $('form.cart').trigger('submit');
+      // $("button.single_add_to_cart_button").show();
+      // }, 300);
+
       // Hide popup
-      $('#wc-customize-modal').fadeOut(250);
+      // $('#wc-customize-modal').fadeOut(250);
 
       // OPTIONAL: remove blur scroll lock
       $('body').removeClass('modal-open');
 
-      // Trigger real WooCommerce add to cart
-      setTimeout(function () {
-        $('button.single_add_to_cart_button').trigger('click');
-        // $("button.single_add_to_cart_button").show();
-      }, 300);
 
     });
 
     /* commnets added by narendra end */
 
   });
+
+  function buildPayload() {
+    // we reuse the variables from the working script when available:
+    var out = { elements: [], canvas: {} };
+
+    // var cv = document.getElementById('wcpp-front-canvas');
+          var cv = document.querySelector('#wc-customize-modal canvas');
+    if (cv) out.canvas = { width: cv.width, height: cv.height };
+
+    // Pull the elements the page already loaded for preview
+    if (window.wcppElements && Array.isArray(window.wcppElements)) {
+      window.wcppElements.forEach(function (el) {
+        var row = JSON.parse(JSON.stringify(el)); // shallow copy
+        // attach current input values
+        var textInput = document.querySelector('[name="wc_personalize[' + el.id + ']"]');
+        var famSel = document.querySelector('[name="wc_personalize_style[' + el.id + '][fontFamily]"]');
+        var sizeSel = document.querySelector('[name="wc_personalize_style[' + el.id + '][fontSize]"]');
+        var colorSel = document.querySelector('[name="wc_personalize_style[' + el.id + '][color]"]');
+
+        if (el.type === 'text') {
+          row.value = {
+            text: textInput ? textInput.value : (el.properties && el.properties.defaultText) || '',
+            fontFamily: famSel ? famSel.value : (el.properties && el.properties.fontFamily) || 'Poppins',
+            fontSize: sizeSel ? parseInt(sizeSel.value || 24, 10) : parseInt((el.properties && el.properties.fontSizePx) || 24, 10),
+            color: colorSel ? colorSel.value : (el.properties && el.properties.defaultColor) || '#000000'
+          };
+        } else if (el.type === 'color') {
+          row.value = {
+            color: (textInput && textInput.value) || (el.properties && el.properties.defaultColor) || '#000000'
+          };
+        } else if (el.type === 'image') {
+          // server will attach the actual uploaded file path via $_FILES
+          row.value = { note: 'user image will be processed server-side' };
+        }
+        out.elements.push(row);
+      });
+    }
+    return out;
+  }
 
 
   // ===== PERSONALIZER ➜ submit payload & preview =====
@@ -717,7 +774,8 @@
         // we reuse the variables from the working script when available:
         var out = { elements: [], canvas: {} };
 
-        var cv = document.getElementById('wcpp-front-canvas');
+        // var cv = document.getElementById('wcpp-front-canvas');
+          var cv = document.querySelector('#wc-customize-modal canvas');
         if (cv) out.canvas = { width: cv.width, height: cv.height };
 
         // Pull the elements the page already loaded for preview
@@ -761,9 +819,11 @@
         // (We also try to grab them later via MutationObserver in your preview code.)
       }
 
-      $form.on('submit', function () {
+      /*$form.on('submit', function () {
         try {
-          var cv = document.getElementById('wcpp-front-canvas');
+          // var cv = document.getElementById('wcpp-front-canvas');
+          var cv = document.querySelector('#wc-customize-modal #wcpp-front-canvas');
+          console.log('CV DATA: ', cv)
           if (cv) {
             // IMPORTANT: toDataURL must succeed (avoid cross-origin BGs)
             var png = cv.toDataURL('image/png');
@@ -778,7 +838,7 @@
         } catch (e) {
           console.warn('[WCPP] buildPayload failed:', e);
         }
-      });
+      });*/
     });
   })();
 
