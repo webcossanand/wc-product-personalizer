@@ -83,7 +83,8 @@ class WC_Product_Personalizer
 
                 <div class="wc-modal-header">
                     <!-- <div class="drag-bar"></div> -->
-                    <h4 class="wc-title">Customize</h4>
+                    <!-- <h4 class="wc-title">Customize</h4> -->
+                    <span class="popup-product-title"></span>
                     <span class="wc-close">&times;</span>
                 </div>
 
@@ -130,10 +131,11 @@ class WC_Product_Personalizer
 
                 </div>
 
-                <!-- <div class="row wc-modal-footer">
-                    <button class="wc-add-cart">Submit</button>
-                    <button class="wc-add-cart">Add To Cart</button>
-                </div> -->
+                <div class="wc-modal-footer">
+                    <p>
+                        Display is an approximate preview. By clicking “Customise now”, you agree to these <a href="/terms-conditions" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>.
+                    </p>
+                </div>
 
             </div>
 
@@ -406,7 +408,7 @@ class WC_Product_Personalizer
 
         // Temporary debug: Check page source (Ctrl+U) for this comment - remove after testing
         echo '<!-- WC Personalizer: INPUTS LOADED - Elements Count: ' . count($elements) . ' -->';
-        echo "test";
+        // echo "test";
     ?>
         <div class="wc-personalizer-inputs">
             <h6 style="margin: 10px 0;color:var(--e-global-color-text)"><?php esc_html_e('Personalize Your Product', 'wc-product-personalizer'); ?></h6>
@@ -555,7 +557,7 @@ class WC_Product_Personalizer
         // Output the container wrapper if not already present
         if (! has_action('woocommerce_single_product_image')) { // Avoid duplicates
             echo '<div class="wc-personalizer-image-container" 
-            style="position:relative; width:100%; max-width:500px; margin:auto;">';
+            style="position:relative; margin:auto;">';
         }
 
         // ✅ PRODUCT IMAGE (YOU WERE MISSING THIS)
@@ -788,6 +790,17 @@ class WC_Product_Personalizer
 
         if (isset($cart_item['wc_personalize'])) {
             foreach ($cart_item['wc_personalize'] as $key => $value) {
+
+                // ✅ REMOVE preview from cart
+                if ($key === 'preview') {
+                    continue;
+                }
+
+                // Optional: remove payload + time also
+                if ($key === 'payload' || $key === 'time') {
+                    continue;
+                }
+
                 $item_data[] = array(
                     'key' => ucfirst($key),
                     'value' => is_array($value) ? implode(', ', $value) : $value,

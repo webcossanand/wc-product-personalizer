@@ -3,6 +3,7 @@
     font-family: Arial, sans-serif;
     width: 100%;
     max-width: 100%;
+    height: fit-content;
 }
 
 .wc-personalizer-inputs h3 {
@@ -11,10 +12,11 @@
 }
 
 .personalization-input-group {
-    margin-bottom: 26px !important;
+    margin-bottom: 6px !important;
 }
 
-.personalization-input-group label {
+.personalization-input-group label,
+.personalization-input-group #text-style {
     font-weight: 600;
     font-size: 13px;
     color: #475569;
@@ -27,15 +29,15 @@
 .personalization-input-group textarea {
 
     width: 100%;
-    padding: 12px 14px;
 
-    border: 1px solid #edf1f5;
     border-radius: 10px;
 
     background: #fbfcfe;
 
-    font-size: 14px;
+    font-size: 12px;
     transition: all .25s ease;
+    padding: 5px !important;
+    border: solid 1px #cdbdbd !important;
 }
 
 .personalization-input-group input:focus,
@@ -48,7 +50,7 @@
 }
 
 .personalization-input-group input[type="color"] {
-    height: 40px;
+    height: 30px;
     padding: 0;
     cursor: pointer;
 }
@@ -57,7 +59,7 @@
 .wc-personalizer-image-container {
     position: relative !important;
     display: inline-block;
-    width: 100%;
+    height: 80%
 }
 
 .personalization-overlay {
@@ -73,7 +75,6 @@
 .personalization-preview-element {
     position: absolute;
     box-sizing: border-box;
-    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 14px;
@@ -110,28 +111,6 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.45);
     /* softer than 0.7 */
-}
-
-.wc-modal-box {
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    width: 920px;
-    max-width: 94%;
-
-    background: #ffffff;
-    border-radius: 18px;
-
-    box-shadow:
-        0 40px 120px rgba(0, 0, 0, .35);
-
-    animation: wcPopup .25s ease;
-
-    max-height: 88vh;
-    overflow: hidden;
 }
 
 @keyframes wcPopup {
@@ -214,23 +193,23 @@
     display: flex;
     gap: 10px;
     /* height: calc(88vh - 130px); */
-    padding: 22px;
+    padding: 10px;
+    background-color: #f3f3f3;
 }
 
 /* LEFT SIDE */
 .wc-preview-area {
-    flex: 1.2;
-    background: linear-gradient(145deg, #f6f8fb, #eef1f6);
-    padding: 20px;
+    flex: 0.5;
+    padding: 25px 150px;
     box-shadow: inset 0 0 25px rgba(0, 0, 0, .04);
-    height: 100%;
+    height: 400px;
+    background-color: #fff;
 }
 
 /* RIGHT SIDE */
 .wc-options-area {
     background: #ffffff;
-    border-radius: 14px;
-    padding: 22px;
+    padding: 10px;
 
     box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
     height: 100%;
@@ -242,10 +221,6 @@
     height: auto;
 }
 
-body.modal-open {
-    overflow: hidden;
-}
-
 .personalization-preview-element {
     white-space: nowrap;
     font-weight: 600;
@@ -253,7 +228,7 @@ body.modal-open {
 
 /* HEADER */
 .wc-modal-header {
-    padding: 10px 0 0 15px;
+    padding: 5x 25px;
     position: sticky;
     top: 0;
     z-index: 20;
@@ -274,15 +249,13 @@ body.modal-open {
 
 /* FOOTER */
 .wc-modal-footer {
-    position: sticky;
-    bottom: 0;
     background: #fff;
-    padding: 18px 24px;
+    padding: 10px;
 
     border-top: 1px solid #eee;
 
     display: flex;
-    flex-flow: row-reverse;
+    justify-content: center;
 }
 
 /* BUTTONS */
@@ -291,7 +264,6 @@ body.modal-open {
     padding: 12px 18px;
     border-radius: 12px;
     font-size: 14px;
-
     transition: .25s;
 }
 
@@ -348,10 +320,6 @@ input[type="file"] {
     backdrop-filter: blur(6px);
 }
 
-.wc-preview-area {
-    flex: 1;
-}
-
 .wc-options-area {
     flex: 0.7;
 }
@@ -365,11 +333,16 @@ input[type="file"] {
     .wc-modal-content {
         flex-direction: column;
         height: auto;
+        overflow: auto;
     }
 
     .wc-options-area {
         max-height: 100%;
         overflow-y: auto;
+    }
+
+    .wc-preview-area{
+        height: 100%;
     }
 }
 
@@ -427,8 +400,7 @@ input[type="file"] {
 @media (max-width: 768px) {
 
     .wc-modal-box {
-        height: 100%;
-        max-height: 100%;
+        height: auto;
 
         top: 0;
         left: 0;
@@ -507,10 +479,17 @@ body.modal-open {
 }
 
 .wc-modal-box {
+
+
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    box-shadow:
+        0 40px 120px rgba(0, 0, 0, .35);
+
+    animation: wcPopup .25s ease;
 
     width: 95%;
     max-width: 900px;
@@ -521,17 +500,11 @@ body.modal-open {
 
     display: flex;
     flex-direction: column;
-
-    overflow: hidden;
+    height: fit-content;
 }
 
-.wc-modal-content {
-    overflow-y: auto;
-    padding: 20px;
-}
-
-.single-product form.cart button.single_add_to_cart_button{
-    display:none;
+.single-product form.cart button.single_add_to_cart_button {
+    display: none;
 }
 
 @media(max-width:768px) {
@@ -556,84 +529,186 @@ body.modal-open {
     margin: 10px 0;
 }
 
-.wc-custom-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px;
-    border-bottom:1px solid #eee;
+.wc-custom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
 }
 
 /* LEFT */
-.wc-left{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
+.wc-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.popup-price{
-    font-size:32px;
-    font-weight:700;
+.popup-price {
+    font-size: 28px;
+    font-weight: 500;
 }
 
 /* RIGHT */
-.wc-right{
-    display:flex;
-    align-items:center;
-    gap:12px;
+.wc-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.wc-qty{
-    padding:8px;
-    border-radius:8px;
+.wc-qty {
+    padding: 8px;
+    border-radius: 8px;
 }
 
 /* Amazon style button */
-.wc-add-cart{
-    background:#FFD814;
-    border:none;
-    padding:10px 12px;
-    border-radius:22px;
-    font-weight:500;
-    cursor:pointer;
+.wc-add-cart {
+    background: #FFD814;
+    border: none;
+    border-radius: 24px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 14px;
+    color: #000;
 }
 
-.wc-add-cart:hover{
-    background:#f7ca00;
+.wc-add-cart:hover {
+    background: #f7ca00;
+}
+
+.wc-add-list {
+    border-radius: 24px;
+    border: 1px solid #ccc;
+    background: white;
+    font-size: 14px;
+    color: #000;
+}
+
+.wc-upload-box {
+    border: 2px dashed #ddd;
+    padding: 5px;
+    text-align: center;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: .3s;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    word-break: break-all;
+}
+
+.wc-upload-box:hover {
+    border-color: #000;
+}
+
+.wc-upload-label {
+    background: #f5f5f5;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.wc-image-preview img {
+    max-width: 150px;
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
+.wpr-mini-cart-image {
+    width: 30% !important;
+}
+
+.woocommerce-product-gallery__wrapper {
+    width: 50%;
 }
 
 .wc-add-list{
-    padding:10px 20px;
-    border-radius:25px;
-    border:1px solid #ccc;
-    background:white;
+	display:none;
 }
 
-.wc-upload-box{
-    border:2px dashed #ddd;
-    padding:25px;
-    text-align:center;
-    border-radius:12px;
-    cursor:pointer;
-    transition:.3s;
+
+/* ===== TABLET ===== */
+
+@media (max-width:1024px){
+
+    .wc-modal-box{
+        width:98%;
+        height:95vh;
+    }
+
+    .wc-options-area{
+        width:320px;
+    }
+
+}
+    
+
+/* ===== MOBILE ===== */
+
+@media (max-width:768px){
+
+    .wc-modal-box{
+        height:100vh;
+        width:100%;
+        border-radius:0;
+    }
+
+    /* stack layout */
+    .wc-modal-content{
+        flex-direction:column;
+    }
+
+    .wc-preview-area{
+        height:45%;
+        padding:10px;
+    }
+
+    .wc-options-area{
+        width:100%;
+        max-width:100%;
+        height:55%;
+        border-left:none;
+        border-top:1px solid #eee;
+    }
+
+    .wc-custom-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .wc-right{
+        width:100%;
+    }
+
+    .wc-add-cart,
+    .wc-add-list{
+        width:100%;
+    }
+
+    .popup-product-title{
+        font-size:16px;
+    }
 }
 
-.wc-upload-box:hover{
-    border-color:#000;
+
+/* ===== SMALL PHONES ===== */
+
+@media (max-width:480px){
+
+    .popup-product-title{
+        font-size:14px;
+    }
+
+    .wc-add-cart,
+    .wc-add-list{
+        padding:12px;
+        font-size:14px;
+    }
+
 }
 
-.wc-upload-label{
-    background:#f5f5f5;
-    padding:10px 18px;
-    border-radius:8px;
-    font-weight:600;
-    cursor:pointer;
-}
-
-.wc-image-preview img{
-    max-width:150px;
-    margin-top:15px;
-    border-radius:10px;
+html,body{
+    overflow-x:hidden;
 }
 
 /* commnets added by narendra end */
