@@ -758,8 +758,7 @@
     }
     return out;
   }
-
-
+  
   // ===== PERSONALIZER ➜ submit payload & preview =====
   (function attachCartSubmitCapture() {
     // make sure the form will upload files if needed

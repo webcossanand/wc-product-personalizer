@@ -247,38 +247,71 @@ class WC_Product_Personalizer
         );
         $products = get_posts($args);
     ?>
-        <div class="wrap">
-            <h1><?php esc_html_e('Personalize Products', 'wc-product-personalizer'); ?></h1>
-            <table class="wp-list-table widefat fixed striped">
-                <thead>
-                    <tr>
-                        <th><?php esc_html_e('Product', 'wc-product-personalizer'); ?></th>
-                        <th><?php esc_html_e('Edit Personalization', 'wc-product-personalizer'); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($products) : ?>
-                        <?php foreach ($products as $product) : ?>
+        <div class="wrap wc-personalizer-admin">
+
+            <div class="wc-admin-header">
+                <h1><?php esc_html_e('Product Personalizer', 'wc-product-personalizer'); ?></h1>
+                <p>Manage products with personalization enabled.</p>
+            </div>
+
+            <div class="wc-admin-card">
+                <table class="wp-list-table widefat fixed striped wc-personalizer-table">
+                    <thead>
+                        <tr>
+                            <th width="70"><?php esc_html_e('Image', 'wc-product-personalizer'); ?></th>
+                            <th><?php esc_html_e('Product', 'wc-product-personalizer'); ?></th>
+                            <th width="120"><?php esc_html_e('Status', 'wc-product-personalizer'); ?></th>
+                            <th width="160"><?php esc_html_e('Actions', 'wc-product-personalizer'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php if ($products) : ?>
+                            <?php foreach ($products as $product) : ?>
+                                <tr>
+                                    <td>
+                                        <?php echo get_the_post_thumbnail($product->ID, 'thumbnail'); ?>
+                                    </td>
+
+                                    <td>
+                                        <strong><?php echo esc_html(get_the_title($product->ID)); ?></strong>
+                                    </td>
+
+                                    <td>
+                                        <span class="wc-status-badge enabled">
+                                            Enabled
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <a href="<?php echo get_edit_post_link($product->ID); ?>"
+                                            class="button">
+                                            Edit
+                                        </a>
+
+                                        <button class="button button-primary wc-personalize-edit-btn"
+                                            data-product-id="<?php echo esc_attr($product->ID); ?>">
+                                            Builder
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
                             <tr>
-                                <td><?php echo esc_html(get_the_title($product->ID)); ?></td>
-                                <td>
-                                    <button class="button wc-personalize-edit-btn" data-product-id="<?php echo esc_attr($product->ID); ?>">
-                                        <?php esc_html_e('Edit', 'wc-product-personalizer'); ?>
-                                    </button>
+                                <td colspan="4">
+                                    <?php esc_html_e('No personalized products found.', 'wc-product-personalizer'); ?>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="2"><?php esc_html_e('No personalized products found.', 'wc-product-personalizer'); ?></td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        <?php endif; ?>
+
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
-        <!-- Modal dialog placeholder -->
-        <div id="wc-personalize-modal" style="display:none;">
+        <!-- Modal -->
+        <div id="wc-personalize-modal">
             <div id="wc-personalize-modal-content"></div>
         </div>
     <?php
